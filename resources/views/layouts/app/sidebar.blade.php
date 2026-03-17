@@ -30,7 +30,7 @@
                 </flux:sidebar.item>
             </flux:sidebar.nav>
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+           <x-desktop-user-menu class="hidden lg:block" :name="App\Models\User::find(session('selected_user_id'))?->name ?? 'Sin usuario'" />
         </flux:sidebar>
 
         <!-- Mobile User Menu -->

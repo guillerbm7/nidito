@@ -13,8 +13,11 @@
                 :initials="auth()->user()->initials()"
             />
             <div class="grid flex-1 text-start text-sm leading-tight">
-                <flux:heading class="truncate">{{ auth()->user()->name }}</flux:heading>
-                <flux:text class="truncate">{{ auth()->user()->email }}</flux:text>
+                <flux:avatar
+    :name="App\Models\User::find(session('selected_user_id'))?->name ?? 'Sin usuario'"
+    :initials="App\Models\User::find(session('selected_user_id'))?->name[0] ?? '?'"
+/>
+                
             </div>
         </div>
         <flux:menu.separator />

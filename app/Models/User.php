@@ -16,31 +16,28 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    public $timestamps = false;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $fillable = ['name', 'avatar_color'];
+
+    public function calendarEntries()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(CalendarEntry::class, 'created_by');
     }
 
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string
+    public function assignedTasks()
     {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
+        return $this->hasMany(CalendarEntry::class, 'assigned_to');
+    }
+
+    public function shoppingItems()
+    {
+        return $this->hasMany(ShoppingItem::class, 'added_by');
+    }
+
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_user')
+                    ->withPivot('rating', 'notes', 'watched_at');
     }
 }

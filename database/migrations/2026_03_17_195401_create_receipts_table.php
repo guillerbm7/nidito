@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('avatar_color', 7)->default('#6366f1');
+            $table->foreignId('shopping_list_id')
+                  ->constrained('shopping_lists')
+                  ->cascadeOnDelete();
+            $table->string('image_path', 512)->nullable();
+            $table->decimal('amount', 8, 2)->nullable();
+            $table->text('notes')->nullable();
+            $table->date('purchased_at');
             $table->timestamp('created_at')->useCurrent();
         });
-
     }
 
     /**
@@ -25,7 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        
+        Schema::dropIfExists('receipts');
     }
 };

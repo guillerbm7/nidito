@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('movies', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('added_by')
+                  ->constrained('users')
+                  ->cascadeOnDelete();
+            $table->unsignedInteger('tmdb_id')->unique();
+            $table->string('title');
+            $table->string('poster_path', 512)->nullable();
+            $table->text('overview')->nullable();
+            $table->smallInteger('release_year')->nullable();
+            $table->string('genre', 150)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('movies');
+    }
+};

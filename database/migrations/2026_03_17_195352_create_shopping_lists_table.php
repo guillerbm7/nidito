@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('avatar_color', 7)->default('#6366f1');
+            $table->date('week_start')->unique()->comment('Lunes de la semana a la que pertenece la lista');
             $table->timestamp('created_at')->useCurrent();
         });
-
     }
 
     /**
@@ -25,7 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        
+        Schema::dropIfExists('shopping_lists');
     }
 };

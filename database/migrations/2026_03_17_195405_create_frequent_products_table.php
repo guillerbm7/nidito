@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('frequent_products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('avatar_color', 7)->default('#6366f1');
-            $table->timestamp('created_at')->useCurrent();
+            $table->string('name', 150)->unique();
+            $table->string('category', 80)->nullable();
+            $table->unsignedInteger('times_used')->default(1);
         });
-
     }
 
     /**
@@ -25,7 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        
+        Schema::dropIfExists('frequent_products');
     }
 };

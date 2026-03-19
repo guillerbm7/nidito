@@ -1,3 +1,27 @@
+<?php
+
+use Livewire\Attributes\Layout;
+use Livewire\Component;
+use App\Models\User;
+
+new #[Layout('layouts::blank')] class extends Component
+{
+    public function selectUser(int $userId): void
+    {
+        $user = User::findOrFail($userId);
+        session(['selected_user_id' => $user->id]);
+        $this->redirect(route('dashboard'));
+    }
+
+    public function with(): array
+    {
+        return [
+            'users' => User::all(),
+        ];
+    }
+};
+?>
+
 <div class="min-h-screen bg-[#F7F5F0] flex flex-col items-center justify-center p-6">
 
     <div class="mb-10 text-center">

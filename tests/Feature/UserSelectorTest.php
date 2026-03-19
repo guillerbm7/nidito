@@ -29,9 +29,7 @@ class UserSelectorTest extends TestCase
     {
         $user = User::create(['name' => 'Álvaro', 'avatar_color' => '#6366f1']);
 
-        $response = $this->post('/session/user', [
-            'user_id' => $user->id,
-        ]);
+        $response = $this->get("/session/user/{$user->id}");
 
         $response->assertRedirect('/dashboard');
         $response->assertSessionHas('selected_user_id', $user->id);

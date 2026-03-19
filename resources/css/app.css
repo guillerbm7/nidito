@@ -66,6 +66,7 @@ select:focus[data-flux-control] {
 } */
 body {
     font-family: 'DM Sans', sans-serif;
+    background-color: #F7F5F0;
 }
 
 .font-serif {

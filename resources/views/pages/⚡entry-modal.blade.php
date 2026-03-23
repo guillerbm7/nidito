@@ -40,7 +40,10 @@ new class extends Component
         $this->entryId = (int) $entryId;
 
         $this->entry = CalendarEntry::find($this->entryId);
-
+        if(!$this->entry){
+            $this->closeModal();
+            return;
+        }
         $this->title      = $this->entry->title;
         $this->type       = $this->entry->type;
         $this->date       = $this->entry->date;
@@ -61,11 +64,16 @@ new class extends Component
         if($this->delete){
             
             $calendarEntry = CalendarEntry::find($this->entryId);
+            if(!$calendarEntry){
+                $this->closeModal();
+                return;
+            }
             $calendarEntry->delete();
 
             $this->closeModal();
 
             $this->dispatch('entry-saved');
+            return;
 
         }
         if($this->type === 'lunch' || $this->type === 'dinner'){
@@ -83,13 +91,20 @@ new class extends Component
         $this->validate();
 
         if($this->edit){
-            CalendarEntry::find($this->entryId)->update([
+            $calendarEntry = CalendarEntry::find($this->entryId);
+
+            if(!$calendarEntry){
+                $this->closeModal();
+                return;
+            }
+            
+            $calendarEntry->update([
                 'assigned_to' => $this->assigned_to, 
                 'title' => $this->title, 
                 'type' => $this->type,
                 'notes' => $this->notes,
                 'recipe_url' => $this->recipe_url
-            ]);
+            ] );
 
         }else{
             CalendarEntry::create([

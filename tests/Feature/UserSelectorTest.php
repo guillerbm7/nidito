@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+
 class UserSelectorTest extends TestCase
 {
     use RefreshDatabase;
@@ -38,10 +39,8 @@ class UserSelectorTest extends TestCase
     /** @test */
     public function test_invalid_user_id_does_not_create_session(): void
     {
-        $response = $this->post('/session/user', [
-            'user_id' => 999,
-        ]);
-
-        $response->assertSessionMissing('selected_user_id');
+        $response = $this->get('/session/user/999')
+                        ->assertStatus(404)
+                        ->assertSessionMissing('selected_user_id');
     }
 }

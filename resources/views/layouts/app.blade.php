@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-@livewireScripts
+
 <body class="bg-[#F7F5F0] font-sans antialiased">
 
     <div class="flex h-screen overflow-hidden">
@@ -81,9 +81,9 @@
 
             {{-- Navegación inferior móvil --}}
             <nav class="lg:hidden flex justify-around items-center py-2 pb-4 bg-[#FFFEFB] border-t border-[#EAE8E2]">
-                <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-0.5">
+                <a href="{{ route('calendario') }}" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">📅</span>
-                    <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('dashboard') ? 'text-[#5B52C4]' : 'text-[#A09B92]' }}">Calendario</span>
+                    <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('calendario') ? 'text-[#5B52C4]' : 'text-[#A09B92]' }}">Calendario</span>
                 </a>
                 <a href="#" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">🛒</span>

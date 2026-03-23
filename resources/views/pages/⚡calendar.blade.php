@@ -10,21 +10,43 @@ new class extends Component
 {
     public string $weekStart    = '';
     public string $selectedDate = '';
+    public string $viewMode = 'week';
+    public string $currentMonth = '';
+
+    public function showWeek(): void { 
+        $this->viewMode = 'week'; 
+        $this->weekStart = Carbon::parse($this->selectedDate)->startOfWeek();
+    }
+   
+    public function showMonth(): void { 
+        $this->viewMode = 'month'; 
+        $this->currentMonth = Carbon::parse($this->selectedDate)->format('Y-m');
+
+    }
 
     public function mount(): void
     {
         $this->weekStart    = Carbon::now()->startOfWeek()->toDateString();
         $this->selectedDate = Carbon::now()->toDateString();
+        $this->currentMonth = Carbon::now()->format('Y-m');
     }
 
-    public function previousWeek(): void
+    public function previousPeriod(): void
     {
-        $this->weekStart = Carbon::parse($this->weekStart)->subWeek()->toDateString();
+        if ($this->viewMode === 'week') {
+            $this->weekStart = Carbon::parse($this->weekStart)->subWeek()->toDateString();
+            return;
+        }
+        $this->currentMonth = Carbon::createFromFormat('Y-m', $this->currentMonth)->subMonth()->format('Y-m');
     }
 
-    public function nextWeek(): void
+    public function nextPeriod(): void
     {
-        $this->weekStart = Carbon::parse($this->weekStart)->addWeek()->toDateString();
+        if ($this->viewMode === 'week') {
+            $this->weekStart = Carbon::parse($this->weekStart)->addWeek()->toDateString();
+            return;
+        }
+        $this->currentMonth = Carbon::createFromFormat('Y-m', $this->currentMonth)->addMonth()->format('Y-m');
     }
 
     public function selectDay(string $date): void
@@ -47,22 +69,47 @@ new class extends Component
         $this->dispatch('entry-modal-delete', entryId: $entryId);
     }
 
+    private function visibleDates(): \Illuminate\Support\Collection
+    {
+        if ($this->viewMode === 'week') {
+            $start = Carbon::parse($this->weekStart)->startOfDay();
+            return collect(range(0, 6))
+                ->map(fn ($i) => $start->copy()->addDays($i)->toDateString());
+        }
+        $month = Carbon::createFromFormat('Y-m', $this->currentMonth);
+        $start = $month->copy()->startOfMonth()->startOfWeek(); // lunes
+        $end = $month->copy()->endOfMonth()->endOfWeek();       // domingo
+        $days = [];
+        for ($d = $start->copy(); $d->lte($end); $d->addDay()) {
+            $days[] = $d->toDateString();
+        }
+        return collect($days);
+    }
+
     #[On('entry-saved')]
     public function refreshEntries(): void
     {
-        
     }
+    
     public function with(): array
     {
-        $weekEnd         = Carbon::parse($this->weekStart)->endOfWeek()->toDateString();
-        $entries         = CalendarEntry::whereBetween('date', [$this->weekStart, $weekEnd])
-                             ->orderBy('type')
-                             ->get();
+        $visibleDates = $this->visibleDates(); // colección de fechas Y-m-d
+
+        $rangeStart = $visibleDates->first();
+        $rangeEnd   = $visibleDates->last();
+
+        $entries = CalendarEntry::query()
+            ->whereBetween('date', [$rangeStart, $rangeEnd])
+            ->orderBy('date')
+            ->orderBy('type')
+            ->get();
+
         $entriesByDate   = $entries->groupBy('date');
         $selectedEntries = $entriesByDate->get($this->selectedDate, collect());
         $users           = User::all()->keyBy('id');
 
         return [
+            'visibleDates'    => $visibleDates,
             'entriesByDate'   => $entriesByDate,
             'selectedEntries' => $selectedEntries,
             'users'           => $users,
@@ -82,11 +129,11 @@ new class extends Component
                     {{ Carbon::parse($weekStart)->locale('es')->isoFormat('MMMM YYYY') }}
                 </h2>
                 <div class="flex gap-1">
-                    <button wire:click="previousWeek"
+                    <button wire:click="previousPeriod "
                             class="w-8 h-8 rounded-lg border border-[#E0DDD6] text-[#7A756D] hover:bg-[#F2EFE8] transition-colors flex items-center justify-center text-sm">
                         ‹
                     </button>
-                    <button wire:click="nextWeek"
+                    <button wire:click="nextPeriod "
                             class="w-8 h-8 rounded-lg border border-[#E0DDD6] text-[#7A756D] hover:bg-[#F2EFE8] transition-colors flex items-center justify-center text-sm">
                         ›
                     </button>

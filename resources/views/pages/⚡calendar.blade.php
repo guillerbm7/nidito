@@ -4,6 +4,7 @@ use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\CalendarEntry;
 use App\Models\User;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -31,6 +32,26 @@ new class extends Component
         $this->selectedDate = $date;
     }
 
+    public function openModal(string $date): void
+    {
+        $this->dispatch('open-entry-modal', date: $date);
+    }
+
+    public function editModal($entryId): void
+    {
+        $this->dispatch('open-entry-modal-edit', entryId: $entryId);
+    }
+
+     public function deleteModal($entryId): void
+    {
+        $this->dispatch('entry-modal-delete', entryId: $entryId);
+    }
+
+    #[On('entry-saved')]
+    public function refreshEntries(): void
+    {
+        
+    }
     public function with(): array
     {
         $weekEnd         = Carbon::parse($this->weekStart)->endOfWeek()->toDateString();
@@ -104,19 +125,7 @@ new class extends Component
         </div>
 
         {{-- Celdas --}}
-        @php
-            $entriesByDate = collect([
-                now()->toDateString() => collect([
-                    (object)['title' => 'Pasta carbonara', 'type' => 'lunch',  'recipe_url' => 'https://youtube.com', 'assigned_to' => null, 'notes' => null],
-                    (object)['title' => 'Limpiar baño',    'type' => 'task',   'recipe_url' => null, 'assigned_to' => 1, 'notes' => null],
-                ]),
-                now()->addDay()->toDateString() => collect([
-                    (object)['title' => 'Pizza casera', 'type' => 'dinner', 'recipe_url' => null, 'assigned_to' => null, 'notes' => null],
-                ]),
-            ]);
-            $selectedEntries = $entriesByDate->get($selectedDate, collect());
-        @endphp
-
+        
         <div class="grid grid-cols-7 flex-1 overflow-y-auto bg-[#F7F5F0] divide-x divide-[#EAE8E2]">
             @for ($i = 0; $i <= 6; $i++)
                 @php
@@ -134,13 +143,29 @@ new class extends Component
 
                     @forelse($dayEntries as $entry)
                         <div @class([
-                            'rounded-lg px-2.5 py-1.5 border-l-2 cursor-pointer hover:opacity-80 transition-opacity',
+                            'relative rounded-lg px-2.5 py-1.5 border-l-2 cursor-pointer hover:opacity-80 transition-opacity group',
                             'bg-[#FFF3E8] border-[#E8894A]' => $entry->type === 'lunch',
                             'bg-[#EDE8FF] border-[#7B6FD4]' => $entry->type === 'dinner',
                             'bg-[#E8F5EE] border-[#4AAD7E]' => $entry->type === 'task',
                             'bg-[#E8F1FF] border-[#4A82E8]' => $entry->type === 'event',
                         ])>
-                            <p class="text-[11.5px] font-medium text-[#2C2A26] truncate">{{ $entry->title }}</p>
+                            <button wire:click.stop="editModal('{{ $entry->id }}')"
+                                    class="absolute top-1 right-5 opacity-0 group-hover:opacity-100 transition-opacity text-[#A09B92] hover:text-[#5B52C4] p-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button wire:click.stop="deleteModal('{{ $entry->id }}')"
+                                    class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-[#A09B92] hover:text-[#5B52C4] p-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                            </button>
+                            <p class="text-[11.5px] font-medium text-[#2C2A26] truncate pr-4">{{ $entry->title }}</p>
                             @if($entry->assigned_to && isset($users[$entry->assigned_to]))
                                 <p class="text-[10px] mt-0.5" style="color: {{ $users[$entry->assigned_to]->avatar_color }}">
                                     {{ $users[$entry->assigned_to]->name }}
@@ -148,15 +173,17 @@ new class extends Component
                             @endif
                             @if($entry->recipe_url)
                                 <a href="{{ $entry->recipe_url }}" target="_blank"
-                                   class="text-[10px] text-[#7B6FD4] hover:underline">🔗 receta</a>
+                                class="text-[10px] text-[#7B6FD4] hover:underline">🔗 receta</a>
                             @endif
                         </div>
                     @empty
-                        <button wire:click.stop="openModal()"
-                                class="mt-auto text-[11px] text-[#7A756D] bg-[#FFFEFB] border border-[#E0DDD6] hover:border-[#5B52C4] hover:text-[#5B52C4] rounded-md py-1.5 transition-colors w-full text-center">
-                            + Añadir entrada
-                        </button>
+                        
                     @endforelse
+
+                    <button wire:click.stop="openModal('{{ $dateStr }}')"
+                            class="mt-auto text-[11px] text-[#7A756D] bg-[#FFFEFB] border border-[#E0DDD6] hover:border-[#5B52C4] hover:text-[#5B52C4] rounded-md py-1.5 transition-colors w-full text-center">
+                        + Añadir entrada
+                    </button>
 
                 </div>
             @endfor
@@ -217,17 +244,18 @@ new class extends Component
                             </p>
                         @endif
                     </div>
+                    
                 </div>
             @empty
                 <p class="text-xs text-[#C0BAB0] italic">Sin eventos ni tareas.</p>
             @endforelse
         </div>
 
-        <button wire:click="openModal()"
+        <button wire:click="openModal('{{ $selectedDate }}')"
                 class="mt-auto w-full py-2 border border-dashed border-[#D8D4CC] rounded-lg text-xs text-[#A09B92] hover:border-[#7B6FD4] hover:text-[#5B52C4] transition-colors">
             + Nueva entrada
         </button>
 
     </div>
-
+    <livewire:pages::entry-modal />
 </div>

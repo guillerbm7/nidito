@@ -26,7 +26,7 @@ new #[Layout('layouts::blank')] class extends Component
 
     <div class="mb-10 text-center">
         <span class="text-5xl">🪺</span>
-        <h1 class="font-serif text-3xl text-[#2C2A26] mt-3 tracking-tight">nidito</h1>
+        <h1 class="font-serif text-3xl text-[#2C2A26] mt-3 tracking-tight">Nidito</h1>
         <p class="text-sm text-[#A09B92] mt-1">¿Quién eres hoy?</p>
     </div>
 

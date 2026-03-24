@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Models\Movie;
 use Illuminate\Support\Facades\Http;
+use App\Models\User;
 
 new class extends Component
 {
@@ -123,7 +124,7 @@ new class extends Component
                                 {{-- ⭐ Rating --}}
                                 <div class="flex gap-1 mt-1">
                                     @for($i = 1; $i <= 5; $i++)
-                                        <span class="text-xs {{ $i <= $stars ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
+                                        <span class="text-x {{ $i <= $stars ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
                                     @endfor
                                     <p class="text-[11px] text-[#7A756D] line-clamp-2"> ({{ $movie['vote_count'] }})</p>
                                 </div>
@@ -157,7 +158,6 @@ new class extends Component
                     @php
                         $stars = round(($movie->rating ?? 0) / 2);
                     @endphp
-
                     <div class="flex gap-3 bg-[#FFFEFB] border border-[#EAE8E2] rounded-xl p-3 mb-3">
 
                         {{-- Poster --}}
@@ -175,15 +175,22 @@ new class extends Component
                             <p class="text-sm font-medium text-[#2C2A26] truncate">{{ $movie->title }}</p>
                             <p class="text-xs text-[#A09B92]">{{ $movie->release_year }}</p>
 
-                            {{-- ⭐ Rating --}}
+                            {{-- Rating --}}
                             <div class="flex gap-1 mt-1">
                                 @for($i = 1; $i <= 5; $i++)
-                                    <span class="text-xs {{ $i <= $stars ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
+                                    <span class="text-s {{ $i <= $stars ? 'text-yellow-500' : 'text-gray-300' }}">★</span>
                                 @endfor
-                                <p class="text-[11px] text-[#7A756D] line-clamp-2"> ({{ $movie->vote_count }})</p>
+                                <p class="text-[11px] text-[#7A756D]"> ({{ $movie->vote_count }})</p>
                             </div>
                             <p class="text-[11px] text-[#7A756D] line-clamp-2">{{ $movie->overview }}</p>
                         </div>
+                        {{-- Added By --}}
+                        
+                        <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0" 
+                            style="background-color: {{ $movie->added_by == 2 ? '#ec489922' : '#6366f122'}}; color: {{ $movie->added_by == 2 ? '#ec4899' : '#6366f1' }}">
+                            {{ $movie->added_by == 2 ? 'M' : 'G' }}
+                        </div>
+                    
                     </div>
 
                 @empty

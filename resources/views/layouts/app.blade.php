@@ -17,7 +17,7 @@
         <aside class="hidden lg:flex lg:flex-col w-56 bg-[#FFFEFB] border-r border-[#EAE8E2] flex-shrink-0">
             <div class="px-5 pt-7 pb-6">
                 <span class="font-serif text-xl text-[#2C2A26] tracking-tight">
-                    🪺 nidito
+                    🪺 Nidito
                 </span>
             </div>
 

@@ -71,6 +71,7 @@ new class extends Component
         return [
             'savedMovies' => Movie::all(),
             'savedTmdbIds' => Movie::pluck('tmdb_id')->map(fn ($id) => (int) $id),
+            'users' => User::all()->keyBy('id'),
         ];
     }
 };
@@ -185,14 +186,11 @@ new class extends Component
                             <p class="text-[11px] text-[#7A756D] line-clamp-2">{{ $movie->overview }}</p>
                         </div>
                         {{-- Added By --}}
-                        
                         <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0" 
-                            style="background-color: {{ $movie->added_by == 2 ? '#ec489922' : '#6366f122'}}; color: {{ $movie->added_by == 2 ? '#ec4899' : '#6366f1' }}">
-                            {{ $movie->added_by == 2 ? 'M' : 'G' }}
+                            style="background-color: {{ $users[$movie->added_by]->avatar_color }}22; color: {{ $users[$movie->added_by]->avatar_color }}">
+                            {{ strtoupper(substr($users[$movie->added_by]->name, 0, 1)) }}
                         </div>
-                    
                     </div>
-
                 @empty
                     <p class="text-xs text-[#C0BAB0] italic">No hay películas en tu lista todavía.</p>
                 @endforelse

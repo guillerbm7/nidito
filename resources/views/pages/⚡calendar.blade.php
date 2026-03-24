@@ -289,10 +289,12 @@ new class extends Component
                     @if($hiddenCount > 0)
                         <p class="text-[10px] text-[#A09B92] px-1">+{{ $hiddenCount }} más</p>
                     @endif
+                    @if($viewMode === 'week')
                     <button wire:click.stop="openModal('{{ $dateStr }}')"
                             class="mt-auto text-[11px] text-[#7A756D] bg-[#FFFEFB] border border-[#E0DDD6] hover:border-[#5B52C4] hover:text-[#5B52C4] rounded-md py-1.5 transition-colors w-full text-center">
                         Añadir entrada
                     </button>
+                    @endif
                 </div>
                 @endforeach
                 </div>

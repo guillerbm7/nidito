@@ -46,7 +46,7 @@ class CalendarTest extends TestCase
 
         $expectedWeekDay = Carbon::now()->startOfWeek()->subWeek()->toDateString();
 
-        Livewire::test('pages::calendar')->call('previousWeek')
+        Livewire::test('pages::calendar')->call('previousPeriod')
             ->assertSet('weekStart', $expectedWeekDay);
     }
     public function test_next_week_goes_forward_one_week(){
@@ -55,7 +55,7 @@ class CalendarTest extends TestCase
 
         $expectedWeekDay = Carbon::now()->startOfWeek()->addWeek()->toDateString();
 
-        Livewire::test('pages::calendar')->call('nextWeek')
+        Livewire::test('pages::calendar')->call('nextPeriod')
             ->assertSet('weekStart', $expectedWeekDay);
     }
     public function test_select_day_changes_selected_date(){

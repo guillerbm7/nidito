@@ -16,4 +16,6 @@ Route::middleware('user.selected')->group(function () {
     })->name('dashboard');
 
     Route::livewire('/calendario', 'pages::calendar')->name('calendario');
+    Route::livewire('/peliculas', 'pages::movies')->name('peliculas');
+
 });

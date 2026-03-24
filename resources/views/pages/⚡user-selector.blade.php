@@ -22,7 +22,7 @@ new #[Layout('layouts::blank')] class extends Component
 };
 ?>
 
-<div class="min-h-screen bg-[#F7F5F0] flex flex-col items-center justify-center p-6">
+<div class="min-h-dvh bg-[#F7F5F0] flex flex-col items-center justify-center p-6">
 
     <div class="mb-10 text-center">
         <span class="text-5xl">🪺</span>
@@ -30,12 +30,12 @@ new #[Layout('layouts::blank')] class extends Component
         <p class="text-sm text-[#A09B92] mt-1">¿Quién eres hoy?</p>
     </div>
 
-    <div class="flex gap-6">
+    <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 w-full max-w-3xl">
         @foreach($users as $user)
             <button
                 wire:click="selectUser({{ $user->id }})"
                 class="flex flex-col items-center gap-3 p-6 bg-[#FFFEFB] rounded-2xl border border-[#EAE8E2]
-                       hover:border-[#5B52C4] hover:shadow-sm transition-all cursor-pointer group w-36">
+                       hover:border-[#5B52C4] hover:shadow-sm transition-all cursor-pointer group w-full sm:w-36">
                 <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-medium transition-transform group-hover:scale-105"
                      style="background-color: {{ $user->avatar_color }}22; color: {{ $user->avatar_color }}">
                     {{ strtoupper(substr($user->name, 0, 1)) }}

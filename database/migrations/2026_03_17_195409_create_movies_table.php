@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('poster_path', 512)->nullable();
             $table->text('overview')->nullable();
+            $table->decimal('rating')->nullable();
+            $table->integer('vote_count')->nullable();
             $table->smallInteger('release_year')->nullable();
             $table->string('genre', 150)->nullable();
             $table->timestamp('created_at')->useCurrent();

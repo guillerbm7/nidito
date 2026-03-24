@@ -14,6 +14,8 @@ class Movie extends Model
         'title',
         'poster_path',
         'overview',
+        'rating',
+        'vote_count',
         'release_year',
         'genre',
     ];

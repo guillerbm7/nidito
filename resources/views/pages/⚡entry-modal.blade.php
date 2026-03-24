@@ -157,7 +157,7 @@ new class extends Component
 
         {{-- Tarjeta del modal --}}
         <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50
-                    w-full max-w-md bg-[#FFFEFB] rounded-2xl shadow-sm border border-[#EAE8E2] p-6">
+                    w-[calc(100%-1rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-[#FFFEFB] rounded-2xl shadow-sm border border-[#EAE8E2] p-6">
 
             <div class="flex items-center justify-between mb-5">
                 <h3 class="font-serif text-lg text-[#2C2A26]"> 
@@ -258,7 +258,7 @@ new class extends Component
         </div>
 
         {{-- Tarjeta del modal --}}
-        <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-[#FFFEFB] rounded-2xl shadow-sm border border-[#EAE8E2] p-6">
+        <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100%-1rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-[#FFFEFB] rounded-2xl shadow-sm border border-[#EAE8E2] p-6">
             <div class="flex items-center justify-between mb-5"></div>
                 <form wire:submit="saveModal" class="flex flex-col gap-4">
                     <div class="flex items-center justify-between mb-5">

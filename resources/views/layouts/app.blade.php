@@ -11,7 +11,7 @@
 
 <body class="bg-[#F7F5F0] font-sans antialiased">
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-dvh overflow-hidden">
 
         {{-- Sidebar escritorio --}}
         <aside class="hidden lg:flex lg:flex-col w-56 bg-[#FFFEFB] border-r border-[#EAE8E2] flex-shrink-0">
@@ -39,6 +39,11 @@
             </div>
 
             <nav class="px-5 flex-1">
+                <a href="{{ route('dashboard') }}"
+                   class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 text-sm transition-colors
+                          {{ request()->routeIs('dashboard') ? 'bg-[#EDE8FF] text-[#5B52C4] font-medium' : 'text-[#5C5850] hover:bg-[#F2EFE8]' }}">
+                    <span class="text-base">🏠</span> Dashboard
+                </a>
                 <a href="{{ route('calendario') }}"
                    class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 text-sm transition-colors
                           {{ request()->routeIs('calendario') ? 'bg-[#EDE8FF] text-[#5B52C4] font-medium' : 'text-[#5C5850] hover:bg-[#F2EFE8]' }}">
@@ -48,8 +53,9 @@
                    class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 text-sm text-[#5C5850] hover:bg-[#F2EFE8] transition-colors">
                     <span class="text-base">🛒</span> La compra
                 </a>
-                <a href="#"
-                   class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 text-sm text-[#5C5850] hover:bg-[#F2EFE8] transition-colors">
+                <a href="{{ route('peliculas') }}"
+                   class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 text-sm transition-colors
+                          {{ request()->routeIs('peliculas') ? 'bg-[#EDE8FF] text-[#5B52C4] font-medium' : 'text-[#5C5850] hover:bg-[#F2EFE8]' }}">
                     <span class="text-base">🎬</span> Películas
                 </a>
             </nav>
@@ -81,6 +87,10 @@
 
             {{-- Navegación inferior móvil --}}
             <nav class="lg:hidden flex justify-around items-center py-2 pb-4 bg-[#FFFEFB] border-t border-[#EAE8E2]">
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-0.5">
+                    <span class="text-xl">🏠</span>
+                    <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('dashboard') ? 'text-[#5B52C4]' : 'text-[#A09B92]' }}">Inicio</span>
+                </a>
                 <a href="{{ route('calendario') }}" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">📅</span>
                     <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('calendario') ? 'text-[#5B52C4]' : 'text-[#A09B92]' }}">Calendario</span>
@@ -89,9 +99,9 @@
                     <span class="text-xl">🛒</span>
                     <span class="text-[9px] uppercase tracking-wider text-[#A09B92]">Compra</span>
                 </a>
-                <a href="#" class="flex flex-col items-center gap-0.5">
+                <a href="{{ route('peliculas') }}" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">🎬</span>
-                    <span class="text-[9px] uppercase tracking-wider text-[#A09B92]">Películas</span>
+                    <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('peliculas') ? 'text-[#5B52C4]' : 'text-[#A09B92]' }}">Películas</span>
                 </a>
             </nav>
 

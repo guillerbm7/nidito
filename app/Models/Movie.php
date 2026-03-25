@@ -25,6 +25,10 @@ class Movie extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
+    public function genres(){
+        return $this->belongsToMany(Genre::class, 'genre_movie');
+    }
+
     public function watchers()
     {
         return $this->belongsToMany(User::class, 'movie_user')

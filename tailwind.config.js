@@ -5,13 +5,5 @@ export default {
         './resources/**/*.php',
         './app/**/*.php',
     ],
-    theme: {
-        extend: {
-            fontFamily: {
-                serif: ['Lora', 'serif'],
-                sans: ['DM Sans', 'sans-serif'],
-            },
-        },
-    },
     plugins: [],
 }

@@ -29,4 +29,10 @@ class User extends Model
         return $this->belongsToMany(Movie::class, 'movie_user')
                     ->withPivot('rating', 'notes', 'watched_at');
     }
+
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class, 'created_by');
+                    
+    }
 }

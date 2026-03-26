@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('recipe_id')->constrained()->nullOnDelete();
             $table->string('title');
             $table->date('date');
             $table->enum('type', ['lunch', 'dinner', 'task', 'event'])->default('event');

@@ -214,7 +214,7 @@ new class extends Component
                             {{-- Poster --}}
                             @if($movie['poster_path'])
                                 <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}"
-                                     class="w-14 h-20 object-cover rounded-lg flex-shrink-0">
+                                     class="w-14 h-20 object-cover rounded-lg shrink-0">
                             @else
                                 <div class="w-14 h-20 bg-surface-tertiary rounded-lg flex items-center justify-center text-xs text-text-placeholder">
                                     Sin carátula
@@ -266,9 +266,9 @@ new class extends Component
                             {{-- Poster (ancho fijo más pequeño) --}}
                             @if($movie->poster_path)
                                 <img src="https://image.tmdb.org/t/p/w200{{ $movie->poster_path }}"
-                                    class="w-12 h-16 object-cover rounded-lg flex-shrink-0">
+                                    class="w-12 h-16 object-cover rounded-lg shrink-0">
                             @else
-                                <div class="w-12 h-16 bg-surface-tertiary rounded-lg flex-shrink-0 flex items-center justify-center text-xs text-text-placeholder">
+                                <div class="w-12 h-16 bg-surface-tertiary rounded-lg shrink-0 flex items-center justify-center text-xs text-text-placeholder">
                                     Sin
                                 </div>
                             @endif

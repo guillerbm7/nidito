@@ -16,7 +16,7 @@
         {{-- =========================================================================
              SIDEBAR - Desktop navigation
              ========================================================================= --}}
-        <aside class="hidden lg:flex lg:flex-col w-56 bg-surface-primary border-border flex-shrink-0">
+        <aside class="hidden lg:flex lg:flex-col w-56 bg-surface-primary border-border shrink-0">
 
             {{-- Logo / Brand --}}
             <div class="px-5 pt-7 pb-6">
@@ -60,6 +60,10 @@
                    @class(['nav-item', 'nav-item-active' => request()->routeIs('peliculas'), 'nav-item-inactive' => !request()->routeIs('peliculas')])>
                     <span class="text-base">🎬</span> Películas
                 </a>
+                <a href="{{ route('recetas') }}"
+                   @class(['nav-item', 'nav-item-active' => request()->routeIs('recetas'), 'nav-item-inactive' => !request()->routeIs('recetas')])>
+                    <span class="text-base">📝</span> Recetas
+                </a>
             </nav>
 
             {{-- Current user greeting --}}
@@ -92,9 +96,7 @@
                 @yield('content')
             </div>
 
-            {{-- =========================================================================
-                 BOTTOM NAV - Mobile navigation
-                 ========================================================================= --}}
+            {{-- BOTTOM NAV - Mobile navigation --}}
             <nav class="lg:hidden flex justify-around items-center py-2 pb-4 bg-surface-primary border-t border-border">
                 <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">🏠</span>
@@ -111,6 +113,10 @@
                 <a href="{{ route('peliculas') }}" class="flex flex-col items-center gap-0.5">
                     <span class="text-xl">🎬</span>
                     <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('peliculas') ? 'text-accent-purple' : 'text-text-subtle' }}">Películas</span>
+                </a>
+                <a href="{{ route('recetas') }}" class="flex flex-col items-center gap-0.5">
+                    <span class="text-xl">📝</span>
+                    <span class="text-[9px] uppercase tracking-wider {{ request()->routeIs('recetas') ? 'text-accent-purple' : 'text-text-subtle' }}">Recetas</span>
                 </a>
             </nav>
 

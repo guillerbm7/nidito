@@ -17,5 +17,6 @@ Route::middleware('user.selected')->group(function () {
 
     Route::livewire('/calendario', 'pages::calendar')->name('calendario');
     Route::livewire('/peliculas', 'pages::movies')->name('peliculas');
+    Route::livewire('/recetas', 'pages::recipes')->name('recetas');
 
 });

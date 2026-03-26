@@ -123,7 +123,7 @@ new class extends Component
             <div class="flex gap-4 mb-4">
                 @if($movie?->poster_path)
                     <img src="https://image.tmdb.org/t/p/w200{{ $movie->poster_path }}"
-                         class="w-20 h-28 object-cover rounded-lg flex-shrink-0">
+                         class="w-20 h-28 object-cover rounded-lg shrink-0">
                 @else
                     <div class="w-20 h-28 bg-surface-tertiary rounded-lg flex items-center justify-center text-xs text-text-placeholder">
                         Sin carátula

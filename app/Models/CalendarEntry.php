@@ -29,4 +29,10 @@ class CalendarEntry extends Model
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
+
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class);
+    }
+
 }

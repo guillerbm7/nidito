@@ -101,6 +101,11 @@ new class extends Component
         return collect($days);
     }
 
+    public function openRecipeDetail($recipeId)
+    {
+        $this->dispatch('open-recipe-detail', recipeId: $recipeId);
+    }
+
     #[On('entry-saved')]
     public function refreshEntries(): void {}
 
@@ -183,7 +188,7 @@ new class extends Component
             $dayNames = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
         @endphp
         <div class="flex-1 min-h-0 overflow-auto bg-surface-secondary">
-            <div class="min-w-[700px] min-h-full flex flex-col">
+            <div class="min-w-175 min-h-full flex flex-col">
 
                 {{-- Day names header --}}
                 <div class="grid grid-cols-7 bg-surface-primary border-b border-border">
@@ -245,13 +250,26 @@ new class extends Component
 
                     {{-- Entry items --}}
                     @forelse($entriesToShow as $entry)
+
+                        @php
+                            $openRecipe = null;
+                            
+                            if(($entry->type === 'lunch' || $entry->type === 'dinner') && !is_null($entry->recipe_id) ){
+                                
+                                $openRecipe = 'openRecipeDetail('. $entry->recipe_id .')';
+                            }
+                            
+                        @endphp
                         <div @class([
                             'relative rounded-lg px-2.5 py-1.5 border-l-2 cursor-pointer hover:opacity-80 transition-opacity group',
                             'entry-lunch' => $entry->type === 'lunch',
                             'entry-dinner' => $entry->type === 'dinner',
                             'entry-task' => $entry->type === 'task',
                             'entry-event' => $entry->type === 'event',
-                        ])>
+                        ]) 
+                        @if($entry->recipe_id)
+                            wire:click.stop="openRecipeDetail({{ $entry->recipe_id }})"
+                        @endif>
                             {{-- Edit button --}}
                             <button wire:click.stop="editModal('{{ $entry->id }}')"
                                     class="absolute top-1 right-5 opacity-0 group-hover:opacity-100 transition-opacity text-text-subtle hover:text-accent-purple p-0.5">
@@ -310,7 +328,7 @@ new class extends Component
     {{-- =========================================================================
          DETAIL PANEL - Selected day info
          ========================================================================= --}}
-    <div class="w-full lg:w-60 bg-surface-primary border-t lg:border-t-0 lg:border-l border-border flex flex-col items-center lg:items-stretch text-center lg:text-left p-4 lg:p-6 flex-shrink-0">
+    <div class="w-full lg:w-60 bg-surface-primary border-t lg:border-t-0 lg:border-l border-border flex flex-col items-center lg:items-stretch text-center lg:text-left p-4 lg:p-6 shrink-0">
 
         {{-- Selected date --}}
         <h3 class="font-serif text-base text-text-primary capitalize">
@@ -330,14 +348,14 @@ new class extends Component
         <div class="mb-4 w-full">
             <p class="text-[10px] uppercase tracking-widest text-text-label mb-2">Comidas</p>
             <div class="flex items-start justify-center lg:justify-start gap-2 mb-2">
-                <div class="w-2 h-2 rounded-full bg-entry-lunch-dot mt-1.5 flex-shrink-0"></div>
+                <div class="w-2 h-2 rounded-full bg-entry-lunch-dot mt-1.5 shrink-0"></div>
                 <div class="text-center lg:text-left">
                     <p class="text-[12.5px] text-text-entry">{{ $lunch?->title ?? 'Sin añadir' }}</p>
                     <p class="text-[11px] text-text-subtle">Comida</p>
                 </div>
             </div>
             <div class="flex items-start justify-center lg:justify-start gap-2">
-                <div class="w-2 h-2 rounded-full bg-entry-dinner-dot mt-1.5 flex-shrink-0"></div>
+                <div class="w-2 h-2 rounded-full bg-entry-dinner-dot mt-1.5 shrink-0"></div>
                 <div class="text-center lg:text-left">
                     <p class="text-[12.5px] text-text-entry">{{ $dinner?->title ?? 'Sin añadir' }}</p>
                     <p class="text-[11px] text-text-subtle">Cena</p>
@@ -378,4 +396,5 @@ new class extends Component
 
     {{-- Entry modal component --}}
     <livewire:pages::entry-modal />
+    <livewire:pages::recipe-detail-modal />
 </div>

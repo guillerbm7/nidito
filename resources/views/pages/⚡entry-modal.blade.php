@@ -5,6 +5,7 @@ use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use App\Models\Recipe;
 
 new class extends Component
 {
@@ -22,6 +23,7 @@ new class extends Component
     #[Validate('required')]
     public string $type = '';
 
+    public ?int $recipe_id = null;
     public ?string $recipe_url = null;
     public ?string $notes = null;
     public ?int $assigned_to = null;
@@ -48,10 +50,12 @@ new class extends Component
             $this->closeModal();
             return;
         }
+        
         $this->title = $this->entry->title;
         $this->type = $this->entry->type;
         $this->date = $this->entry->date;
         $this->notes = $this->entry->notes ?? '';
+        $this->recipe_id = $this->entry->recipe_id ?? null;
         $this->recipe_url = $this->entry->recipe_url ?? '';
         $this->assigned_to = $this->entry->assigned_to;
     }
@@ -93,9 +97,10 @@ new class extends Component
         }
 
         $this->validate();
-
+        
         // Update existing
         if ($this->edit) {
+            
             $calendarEntry = CalendarEntry::find($this->entryId);
             if (! $calendarEntry) {
                 $this->closeModal();
@@ -105,6 +110,7 @@ new class extends Component
                 'assigned_to' => $this->assigned_to,
                 'title' => $this->title,
                 'type' => $this->type,
+                'recipe_id' => $this->recipe_id,
                 'notes' => $this->notes,
                 'recipe_url' => $this->recipe_url,
             ]);
@@ -115,6 +121,7 @@ new class extends Component
                 'assigned_to' => $this->assigned_to,
                 'title' => $this->title,
                 'date' => $this->date,
+                'recipe_id' => $this->recipe_id,
                 'type' => $this->type,
                 'notes' => $this->notes,
                 'recipe_url' => $this->recipe_url,
@@ -144,6 +151,7 @@ new class extends Component
     {
         return [
             'users' => User::all(),
+            'recipes' => Recipe::all(),
         ];
     }
 };
@@ -175,8 +183,14 @@ new class extends Component
 
                 {{-- Title --}}
                 <div>
+                    @php
+                        $value = null;
+                        if($recipe_id){
+                            $value = Recipe::find($recipe_id)->first()->title;
+                        }
+                    @endphp
                     <label class="form-label">Título</label>
-                    <input type="text" wire:model="title" placeholder="Ej: Pasta carbonara" class="form-input">
+                    <input type="text" wire:model="title" placeholder="Ej: Pasta carbonara" class="form-input" value="{{ $value }}">
                     @error('title') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
 
@@ -207,9 +221,18 @@ new class extends Component
                 
                 {{-- Recipe URL (only for meals) --}}
                 @if($type === 'lunch' || $type === 'dinner')
-                    <div>
+                   {{-- <div>
                         <label class="form-label">Enlace a receta</label>
                         <input type="text" wire:model="recipe_url" placeholder="https://..." class="form-input">
+                    </div> --}}
+                    <div>
+                        <label class="form-label">Receta</label>
+                        <select  wire:model.live="recipe_id" class="form-input">
+                            <option value="">— Sin asignar —</option>
+                            @foreach ( $recipes as $recipe)
+                                <option value="{{ $recipe->id }}">{{ $recipe->title }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 @endif
 

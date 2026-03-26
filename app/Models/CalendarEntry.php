@@ -15,6 +15,7 @@ class CalendarEntry extends Model
         'date',
         'type',
         'notes',
+        'recipe_id',
         'recipe_url',
         'color',
         'is_completed',
